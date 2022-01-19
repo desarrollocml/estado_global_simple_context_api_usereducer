@@ -1,15 +1,16 @@
-import { createContext, useReducer } from 'react';
-import StoreReducer, { initialStore } from './StoreReducer';
+import { createContext, useContext, useReducer } from "react";
+import StoreReducer, { initialStore } from "./StoreReducer";
 const StoreContext = createContext();
 
-export default function StoreProvider({children}) {
-const [store, dispatch] = useReducer(StoreReducer, initialStore);
-
-
+export default function StoreProvider({ children }) {
   return (
-        <StoreContext.Provider value={[store, dispatch]}>
-            {children}
-        </StoreContext.Provider>
-  )
+    <StoreContext.Provider value={useReducer(StoreReducer, initialStore)}>
+      {children}
+    </StoreContext.Provider>
+  );
 }
-export {StoreContext}
+
+const useStore = () => useContext(StoreContext)[0];
+const useDispatch = () => useContext(StoreContext)[1];
+
+export { StoreContext, useStore, useDispatch };

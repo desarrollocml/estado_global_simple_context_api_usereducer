@@ -1,18 +1,40 @@
-import React from "react";
+/* import React, { useContext } from "react";
+import { StoreContext } from "../store/StoreProvider"; */
+import { useDispatch, useStore } from "../store/StoreProvider";
+import { types } from "../store/StoreReducer";
 
 export default function MyComponent() {
+ 
+  const {user,products} = useStore();
+  const dispatch = useDispatch();
+  
   return (
     <div>
       <h1>MyComponent</h1>
-      <h2>User: Name</h2>
-      <button>Logout</button>
-      <button>Login</button>
+      <h2>User: {user?.name}</h2>
+      <button onClick={() => dispatch({ type: types.authLogout })}>
+        Logout
+      </button>
+      <button
+        onClick={() =>
+          dispatch({ type: types.authLogin, payload: { id: 1, name: "Luis" } })
+        }
+      >
+        Login
+      </button>
       <h2>Products</h2>
       <ul>
-        <li>Title</li>
+        {products.map((product) => (
+          <li key={product.id}>{product.title}</li>
+        ))}
       </ul>
-      <button>Delete All</button>
-      <button>Login</button>
+      <button onClick={() => dispatch({ type: types.productDeleteAll })}>
+        {" "}
+        Delete All
+      </button>
+      <button onClick={() => dispatch({ type: types.productChange })}>
+        Change Product
+      </button>
     </div>
   );
 }
